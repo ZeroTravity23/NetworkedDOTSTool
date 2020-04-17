@@ -2,8 +2,10 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Burst;
+using Unity.NetCode;
+using Unity.Networking.Transport;
 
-[AlwaysUpdateSystem]
+[AlwaysUpdateSystem, UpdateInWorld(UpdateInWorld.TargetWorld.ClientAndServer)]
 public class LevelUp : JobComponentSystem
 {
     protected override JobHandle OnUpdate(JobHandle inputDeps)
@@ -12,7 +14,6 @@ public class LevelUp : JobComponentSystem
         .WithoutBurst()
         .ForEach((ref PlayerData data) =>
         {
-            //Logic goes here!
             data.level += 10;
         }).Run();
         return default;

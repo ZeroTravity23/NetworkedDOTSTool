@@ -3,7 +3,10 @@ using Unity.Collections;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.NetCode;
+using Unity.Networking.Transport;
 
+[UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
 public class PlayerSpawner : MonoBehaviour {
 
 public int quantity = 10;
