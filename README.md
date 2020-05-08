@@ -44,9 +44,9 @@ The Netwoked DOTS Tool can be found under the Toolbar DOTS > Networked DOTS Tool
 This will open the custom editor. Seen below.
 <img src="Images/NetworkedDOTSTool.png"/>
 
-<video width="420" height="315"
+<img width="420" height="315"
 src="https://youtu.be/E8NhTyO2Joo">
-</video>
+</img>
  
 
 
