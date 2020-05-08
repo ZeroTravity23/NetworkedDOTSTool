@@ -6,6 +6,8 @@ This project attempts to refine the current <a href="https://github.com/Unity-Te
 
 >I highly recommend you download at least one (DOTSSample is more recent and smaller) and play around to get a feel for what is possible with DOTS architecture. Additionally, Unity has put together a <a href="unity.com/megacity">Megacity</a> where 4.5 million mesh renderers, 5000 dynamic vehicles, 100,000 unique audio sources, and 200,000 unique building objects are all in one scene. All while maintaining 60FPS! It's an amazing milestone, and can be <a href="http://megacity.unity3d.com/MegaCity_GDC2019_Release_OC.zip">downloaded here as well</a>.
 
+> These two resources helped me tremendously in understanding the configuration of DOTS ECS and NetCode. <a href="https://www.youtube.com/watch?v=P_-FoJuaYOI&t">UNITY COPENHAGEN - DOTSSample & the NetCode Behind It</a> | <a href="https://www.youtube.com/playlist?list=PLzDRvYVwl53s40yP5RQXitbT--IRcHqba">DOTS ECS Tutorials</a>
+
 ## DOTS & ECS
 The Data Oriented Technology Stack (DOTS) and the Entity Component System (ECS) drastically increase the performance of games developed in Unity. This performance boost permits for stable and reliable network communications necessary for immersive and consistent networked and non-networked gameplay. DOTS is comprised of three major components: the C# Job System, ECS, and a burst compiler. These in conjunction allow for processes to be split across multiple threads as opposed to them all running on the main thread. DOTS is not applicable to everything, and MonoBehaviors are not being deprecated. However, DOTS is the preferred architecture for systems that are extremely intensive such as instantiating thousands of objects and managing networked items. This project focuses on the ECS elements, as this is where the code implementation truly changes. The C# Job System and burst compiler can be obtained via installing Microsoft's Visual Studio.  Utilizing their performance boosting capabilities is simply a matter of enabling them.
 ### Entities
@@ -37,6 +39,13 @@ The project includes the following packages (dependencies):
 - Unity NetCode 0.1.0-preview.6
 - Unity Transport 0.3.0 - preview.6
 
+### General Use Notes
+1. Do not change the folder structure of the current project. These are configured in a way that the generated assets and scripts are neatly organized for you.
+2. Networked gameplay is configured by default. If you want to disable the networking capabilities of this project, you **MUST** uninstall the NetCode and NetCode.Transport packages.
+3. The Game.cs script is required for networked connections. This script connects you to your sever. Only remove if going for a non-networked game.
+4. Networked games require that the entites (GameObjects) need to be a child of either the SharedData or ServerData parent objects.
+5. Server entities (GameObjects) must be prefabs for NetCode to correctly function. 
+
 ### Installation / Navigation
 To begin using the tool, download this repository and open the project in Unity.
 The Netwoked DOTS Tool can be found under the Toolbar DOTS > Networked DOTS Tool.
@@ -44,17 +53,57 @@ The Netwoked DOTS Tool can be found under the Toolbar DOTS > Networked DOTS Tool
 This will open the custom editor. Seen below.
 <img src="Images/NetworkedDOTSTool.png"/>
 
-<img width="420" height="315"
-src="https://youtu.be/E8NhTyO2Joo">
-</img>
+#### Creating a Component
+1. Under the Component section of the tool, enter a name of the component
+2. Select the data type of this store. TAG is used for unique identifiers. COMPOSITE is for the creation of more complex components with multiple variables. Create each individual one first, then add them to the array (set the size).
+3. Click either the 'Create Component' or 'Create Composite Component' buttons.
+4. Navigate to the Editor > Components folder. Your newly created Component Asset is available.
+5. If you want to create a script for this componet, click the asset. In the inspector there should be a custom button for creating the final script.
+6. Navigate to the Scripts > Components folder and the final component script is available. This can be now attached to GameObjects if utilizing the Hybrid ECS approach.
+
+#### Creating an Entity
+1. Enter a name for the Entity.
+2. Attach a previously created Component Asset. Multiple Component assets can be added if desired, the size must reflect your desired amount.
+3. Click the Create Entity button.
+4. Navigate to the Editor > Entities folder. Your newly created Entity (Archetype) Asset is there.
+5. To create a spawner script for this entity, click the asset. In the inspector there should be a custom button for creating the final spawner script.
+6. Navigate to the Scripts > Entities folder and the final entity spawner script is available. This can be attached to a GameObject to create your desired amount of entities.
+
+>Note: The Entity asset is not required for developing networked games. The Convert to Client Server Entity script present on the SeverData and SharedData GameObjects in the project automatically convert these objects to entities. If you need to create entities separate from the standard or are developing a non-networked game, use this as a template.
+
+#### Creating a System
+1. Enter the name of the System you are creating. (ie. Regenerate, or LevelUp)
+2. Attach the Component Assets this will be acting upon. Do not attach duplicates. Alternatively, you can attach an Entity asset and the tool will find the associated components.
+3. Click the Create System button.
+4. Navigate to the Editor > Systems (Jobs) folder. Your newly created System Asset is there.
+5. To create the final system script, click the asset. In the inspector there should be a custom button for creating the final system script.
+6. Navigate to the Scripts > Systems (Jobs) folder and the final system script is available. This does not need to be attached to an object to be active/ effective.
+7. Open the script and update it accordingly to provide logic.
+
+Please follow this <a href="https://youtu.be/E8NhTyO2Joo">DEMO</a> for a more detailed approach and application.
+
+### Entity Debugger
+When you start the game, you may notice that none of your objects appear in the project heirarchy. Oh no! No worries, to view them you must navigate to the Entity Debugger for inspection. This menu can be found in the Toolbar under Window > Analysis > Entity Debugger.
  
-
-
-
 ## Networking
 ### NetCode
 [Back to Top](#about)
 
 This project utilizes NetCode for the implementation of networking. At the time of developing this tool, this package is still in preview and fairly unstable and ever-changing.
+The project currently is configured for Client and Server data communication utilizing RPC requests, GhostCollectors, and GhostAuthoring Components.
 
+For items that will be on both the Client and Server, put these GameObjects under the SharedData object.
+> These items **must** be a child of the SharedData GameObject.
 
+For objects that will be solely handled by the Server, put these GameObjects under the ServerData object.
+Server objects **must** have a GhostAuthoring Component. The inspector has been updated to have a button readily available to add these components.
+Once these are added, you must Select Update Components and then Generate Code.
+> Server objects **must** be prefabs.
+> These items **must** be a child of the ServerData GameObject.
+
+Once this code has been generated, you must update the GhostCollection GameObject. To do so, simply click the object and in the inspector use the 'Update Ghost List' button and then follow up with clicking the 'Generate Collection Code' button.
+
+### Multiplayer PlayMode Tools
+To run your networked game, the Multiplayer PlayMode Tools editor permits you to run multiple clients and switch between them. Optionally, you can run only the client or only the server to see how your code is performing.
+To access this window you navigate to Multiplayer > PlayMode Tools in the editor toolbar.
+> If the NetCode package is installed, your Editor will run in a Client and Server mode by default. When developing non-networked games you want your code to be created in the 'Default' world. The only way to ensure your objects are instantiated in the default world is to remove this package entirely.
