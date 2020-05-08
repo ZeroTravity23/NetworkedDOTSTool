@@ -38,7 +38,7 @@ The project includes the following packages (dependencies):
 - Unity Transport 0.3.0 - preview.6
 
 ### Installation / Navigation
-To begin using the tool, download this repository, and open the project in Unity.
+To begin using the tool, download this repository and open the project in Unity.
 The Netwoked DOTS Tool can be found under the Toolbar DOTS > Networked DOTS Tool.
 
 This will open the custom editor. Seen below.
