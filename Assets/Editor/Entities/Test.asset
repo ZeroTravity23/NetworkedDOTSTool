@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 1
-  m_Script: {fileID: 11500000, guid: b6dbe712e3085f3408038c6a92d7ca6f, type: 3}
-  m_Name: LevelUp
+  m_Script: {fileID: 11500000, guid: f23a4ef6ecbc8e14f941ffba1199614a, type: 3}
+  m_Name: Test
   m_EditorClassIdentifier: 
-  isMainThread: 1
   components:
   - {fileID: 11400000, guid: 6a97d2d63a19f3a47b1cc62fe03a1e48, type: 2}
-  entities: []

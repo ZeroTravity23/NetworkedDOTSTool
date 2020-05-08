@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 11500000, guid: b6dbe712e3085f3408038c6a92d7ca6f, type: 3}
-  m_Name: LevelUp
+  m_Name: RegenerateHealth
   m_EditorClassIdentifier: 
   isMainThread: 1
+  isNetworked: 1
   components:
-  - {fileID: 11400000, guid: 6a97d2d63a19f3a47b1cc62fe03a1e48, type: 2}
+  - {fileID: 11400000, guid: 75f76c3aea89c4f49b83f22239dbecf7, type: 2}
   entities: []

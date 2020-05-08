@@ -6,6 +6,7 @@ using UnityEngine;
 public class SystemAsset : ScriptableObject
 {
     public bool isMainThread;
+    public bool isNetworked;
     public ComponentAsset[] components = new ComponentAsset[0];
     public EntityAsset[] entities = new EntityAsset[0];
 }
