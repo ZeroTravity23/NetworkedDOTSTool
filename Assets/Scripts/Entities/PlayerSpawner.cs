@@ -13,7 +13,7 @@ public int quantity = 10;
 
 void Start() {
 EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-EntityArchetype playerArchetype = entityManager.CreateArchetype(typeof(PlayerData));
+EntityArchetype playerArchetype = entityManager.CreateArchetype(typeof(PlayerData), typeof(ConvertToClientServerEntity));
 NativeArray<Entity> entityArray = new NativeArray<Entity>(quantity, Allocator.Temp);
 entityManager.CreateEntity(playerArchetype, entityArray);
 
