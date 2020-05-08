@@ -4,8 +4,10 @@
 
 This project attempts to refine the current <a href="https://github.com/Unity-Technologies/FPSSample/">FPSSample</a> and <a href="https://github.com/Unity-Technologies/DOTSSample/">DOTSSample</a> projects, which provide tools and guidance for developing networked games on the new DOTS architecture, into a lightweight version. Having used these tools previously and by researching Unity forums, I have identified a strong need for a lightwieght DOTS tool in the game development community. The current tools consist of Unity projects with fully functional examples that make them bulky and difficult to work with. These included examples increase build times and make testing difficult. Consequently, these tools are not efficient and are of little use to developers new to the DOTS architecture. This refined tool utilizes scriptable objects and a custom editor to generate the scripts necessary for ECS implementation. This allows users to more readily transition from object oriented programming to data oriented programming. Users may wish to continue using these scriptable objects to build their ECS scripts or inspect the generated scripts to get a better understanding of their structure for transitioning away from the tool. Ultimately, I hope users can come away from using this tool with a stronger understanding of DOTS ECS implementation in Unity and applying it, where applicable, to their projects.
 
+>I highly recommend you download at least one (DOTSSample is more recent and smaller) and play around to get a feel for what is possible with DOTS architecture. Additionally, Unity has put together a <a href="unity.com/megacity">Megacity</a> where 4.5 million mesh renderers, 5000 dynamic vehicles, 100,000 unique audio sources, and 200,000 unique building objects are all in one scene. All while maintaining 60FPS! It's an amazing milestone, and can be <a href="http://megacity.unity3d.com/MegaCity_GDC2019_Release_OC.zip">downloaded here as well</a>.
+
 ## DOTS & ECS
-The Data Oriented Technology Stack (DOTS) and the Entity Component System (ECS) drastically increase the performance of games developed in Unity. This performance boost permits for stable and reliable network communications necessary for immersive and consistent networked and non-networked gameplay. DOTS is comprised of three major components: the C# Job System, ECS, and a burst compiler. These in conjunction allow for processes to be split across multiple threads as opposed to them all running on the main thread. DOTS is not applicable to everything, and MonoBehaviors are not being deprecated. However, DOTS is the preferred architecture for systems that are extremely intensive such as instantiating thousands of objects and managing networked items. This project focuses on the ECS elements, as this is where the code implementation truly changes. The C# Job System and burst compiler can be obtained via installing Microsoft's Visual Studio and utilizing their features is simply a matter of enabling them.
+The Data Oriented Technology Stack (DOTS) and the Entity Component System (ECS) drastically increase the performance of games developed in Unity. This performance boost permits for stable and reliable network communications necessary for immersive and consistent networked and non-networked gameplay. DOTS is comprised of three major components: the C# Job System, ECS, and a burst compiler. These in conjunction allow for processes to be split across multiple threads as opposed to them all running on the main thread. DOTS is not applicable to everything, and MonoBehaviors are not being deprecated. However, DOTS is the preferred architecture for systems that are extremely intensive such as instantiating thousands of objects and managing networked items. This project focuses on the ECS elements, as this is where the code implementation truly changes. The C# Job System and burst compiler can be obtained via installing Microsoft's Visual Studio.  Utilizing their performance boosting capabilities is simply a matter of enabling them.
 ### Entities
 The entities are essentially lightweight GameObjects without any data that serve as placeholders or ID’s that components are assigned to. At first they may seem foreign as they have no components, not even a Transform, like that of an empty GameObject. This reduction allows for more compact storage in memory so that systems can easily identify the components and entities to act upon.
 ### Components
@@ -17,7 +19,7 @@ Game development is uniquely visual and we have become extremely familiar with t
 
 This tool permits for both Pure and Hybrid ECS implementations. However, it is important to note that NetCode (the DOTS implementation of Networking) requires the hybrid approach.
 ## How To Use
-[Top](#about)
+[Back to Top](#about)
 
 
 ### Requirements
@@ -26,7 +28,7 @@ This tool permits for both Pure and Hybrid ECS implementations. However, it is i
 
 ## Networking
 ### NetCode
-[Top](#about)
+[Back to Top](#about)
 
 This project utilizes NetCode for the implementation of networking. At the time of developing this tool, this package is still in preview and fairly unstable and ever-changing.
 
