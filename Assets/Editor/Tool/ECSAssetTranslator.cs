@@ -17,7 +17,7 @@ public static class ECSAssetTranslator
     public static void Write(StreamWriter sw, string name, EntityAsset entityAsset)
     {
         ECSType type = ECSType.ENTITY;
-        Header(type, sw);
+        Header(type, sw, false);
         Class_StructDefinition(type, sw, name);
         Define(entityAsset, name, sw);
         Terminate(sw);
@@ -27,7 +27,7 @@ public static class ECSAssetTranslator
     public static void Write(StreamWriter sw, string name, ComponentAsset component)
     {
         ECSType type = ECSType.COMPONENT;
-        Header(type, sw);
+        Header(type, sw, false);
         Class_StructDefinition(type, sw, name);
         Define(component, sw);
         Terminate(sw);
@@ -36,8 +36,8 @@ public static class ECSAssetTranslator
     public static void Write(StreamWriter sw, string name, SystemAsset system)
     {
         ECSType type = ECSType.SYSTEM;
-        Header(type, sw);
-        Class_StructDefinition(type, sw, name, system.isMainThread);
+        Header(type, sw, system.isNetworked);
+        Class_StructDefinition(type, sw, name, system.isMainThread, system.isNetworked);
         Define(system, sw);
         Terminate(sw);
     }
@@ -45,7 +45,7 @@ public static class ECSAssetTranslator
     //public static void Write(StreamWriter sw, string name, )
 
     //Establish Unity dependencies
-    public static void Header(ECSType type, StreamWriter sw)
+    public static void Header(ECSType type, StreamWriter sw, bool isNetworked)
     {
         switch (type)
         {
@@ -67,6 +67,11 @@ public static class ECSAssetTranslator
                 sw.WriteLine("using Unity.Entities;");
                 sw.WriteLine("using Unity.Jobs;");
                 sw.WriteLine("using Unity.Burst;");
+                if (isNetworked)
+                {
+                    sw.WriteLine("using Unity.NetCode;");
+                    sw.WriteLine("using Unity.Networking.Transport;");
+                }
                 sw.WriteLine();
                 break;
             default:
@@ -77,13 +82,15 @@ public static class ECSAssetTranslator
                 sw.WriteLine("using Unity.Burst;");
                 sw.WriteLine("using System.Collections;");
                 sw.WriteLine("using System.Collections.Generic;");
+                sw.WriteLine("using Unity.NetCode;");
+                sw.WriteLine("using Unity.Networking.Transport;");
                 sw.WriteLine();
                 break;
         }
     }
 
     //Create class or struct definition.
-    public static void Class_StructDefinition(ECSType type, StreamWriter sw, string name, bool isMainThread)
+    public static void Class_StructDefinition(ECSType type, StreamWriter sw, string name, bool isMainThread, bool isNetworked)
     {
         if (type != ECSType.SYSTEM)
             isMainThread = false;
@@ -99,8 +106,10 @@ public static class ECSAssetTranslator
                 sw.WriteLine("public struct " + name + " : IComponentData {");
                 break;
             case ECSType.SYSTEM:
-                if (isMainThread)
+                if (isMainThread && !isNetworked)
                     sw.WriteLine("[AlwaysSynchronizeSystem]");
+                else if(isMainThread && isNetworked)
+                    sw.WriteLine("[AlwaysUpdateSystem, UpdateInWorld(UpdateInWorld.TargetWorld.ClientAndServer)]");
                 sw.WriteLine("public class " + name + " : JobComponentSystem {");
                 break;
             default:
@@ -240,6 +249,7 @@ public static class ECSAssetTranslator
             }
             
         }
+        sw.WriteLine(".WithoutBurst() //Remove this if Burst compilation is possible.");
         if (asset != null)
         {
             sw.WriteLine(".WithAll<" + asset.name + ">()");

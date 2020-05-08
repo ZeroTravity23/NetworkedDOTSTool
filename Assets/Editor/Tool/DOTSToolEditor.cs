@@ -15,6 +15,7 @@ public class DOTSToolEditor : EditorWindow
     public string componentName = "";
     public string systemName = "";
     public bool isMainThread = true;
+    public bool isNetworked = false;
     public TypeOf type;
 
     [MenuItem("DOTS/Networked DOTS Tool")]
@@ -82,7 +83,8 @@ public class DOTSToolEditor : EditorWindow
         EditorGUILayout.HelpBox("This creates a System asset. Systems are the logic that act upon components. You must have at least one component. Alternatively, provide an entity asset, and the tool will create a job for all components associated with that archetype. If a 'TAG' component is associated with the job, it will apply to only those with this component. Please decide whether this should run on the main thread or be multithreaded.", MessageType.Info);
         systemName = EditorGUILayout.TextField("System Name", systemName);
         isMainThread = EditorGUILayout.Toggle("Run on Main Thread", isMainThread);
-        if(isMainThread == false)
+        isNetworked = EditorGUILayout.Toggle("Networked System", isNetworked);
+        if (isMainThread == false)
         {
             EditorGUILayout.HelpBox("Disabling this enables multithreaded systems. Mutlithreading is not recommended for simple functions (i.e. input for movement).", MessageType.Warning);
         }
@@ -97,7 +99,7 @@ public class DOTSToolEditor : EditorWindow
         EditorGUI.BeginDisabledGroup(systemName.Equals("") || (systemComponents.Length <= 0 && systemEntities.Length <= 0));
         if (GUILayout.Button("Create System Asset"))
         {
-            AssetDatabase.CreateAsset(new SystemAsset() { name = systemName, isMainThread = isMainThread, components = systemComponents, entities = systemEntities }, "Assets/Editor/Systems/" + systemName + ".asset");
+            AssetDatabase.CreateAsset(new SystemAsset() { name = systemName, isMainThread = isMainThread, isNetworked = isNetworked, components = systemComponents, entities = systemEntities }, "Assets/Editor/Systems/" + systemName + ".asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
