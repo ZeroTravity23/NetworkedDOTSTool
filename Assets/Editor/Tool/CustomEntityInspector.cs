@@ -9,7 +9,8 @@ public class CustomEntityInspector : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if(GUILayout.Button("Create Entity Spawner Script"))
+        EditorGUILayout.HelpBox("If you do not include a component, this will fail to create a successful spawner script. Please add at least one component before generating this script.", MessageType.Warning);
+        if (GUILayout.Button("Create Entity Spawner Script"))
         {
             // remove whitespace and minus
             string name = target.name.Replace(" ", "_");
