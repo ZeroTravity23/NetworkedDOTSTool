@@ -42,7 +42,7 @@ To begin using the tool, download this repository, and open the project in Unity
 The Netwoked DOTS Tool can be found under the Toolbar DOTS > Networked DOTS Tool.
 
 This will open the custom editor. Seen below.
-[](/NetworkedDOTSTool.png)
+[](NetworkedDOTSTool.png)
 
 ## Networking
 ### NetCode
